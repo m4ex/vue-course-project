@@ -1,14 +1,16 @@
-<template>
-  <div>Task 02-components/01-MeetupDescription</div>
-</template>
-
-<script>
-// TODO: Task 02-components/01-MeetupDescription
-
-export default {
-  name: 'MeetupDescription',
-};
+<script setup>
+// DONE: Task 02-components/02-MeetupDescription
+defineProps({
+  description: {
+    type: String,
+    required: true,
+  },
+});
 </script>
+
+<template>
+  <p class="meetup-description">{{ description }}</p>
+</template>
 
 <style scoped>
 /* _meetup-description.css */

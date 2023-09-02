@@ -1,12 +1,40 @@
 <template>
-  <div>Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup</div>
+  <button
+    class="button-group__button"
+    :class="{ 'button-group__button_active': isActive }"
+    type="button"
+    aria-selected="false"
+    @click="setValue"
+  >
+    <slot></slot>
+  </button>
 </template>
 
 <script>
-// TODO: Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup
+// DONE: Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup
 
 export default {
   name: 'UiButtonGroupItem',
+  props: {
+    value: {
+      required: true,
+    },
+  },
+  methods: {
+    setValue() {
+      this.$parent.setModelValue(this.value);
+    },
+  },
+  computed: {
+    isActive() {
+      return this.value === this.$parent.modelValue;
+    },
+  },
+  mounted() {
+    if (this.$parent.$options.name !== 'UiButtonGroup') {
+      console.warn('UiButtonGroupItem should only be used inside UiButtonGroup');
+    }
+  },
 };
 </script>
 

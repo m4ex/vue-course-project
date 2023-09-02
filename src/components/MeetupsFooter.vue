@@ -1,11 +1,11 @@
 <template>
   <footer class="footer">
-    <UiContainer>&copy; 2022-{{ new Date().getFullYear() }}</UiContainer>
+    <UiContainer>&copy;m4ex 2022-{{ new Date().getFullYear() }}</UiContainer>
   </footer>
 </template>
 
 <script>
-// TODO: Добавить имя автора проекта :)
+// DONE: Добавить имя автора проекта :)
 import UiContainer from './UiContainer.vue';
 
 export default {

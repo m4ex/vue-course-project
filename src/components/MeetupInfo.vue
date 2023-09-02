@@ -1,16 +1,43 @@
-<template>
-  <div>Task 02-components/03-MeetupInfo</div>
-</template>
+<script setup>
+// DONE: Task 02-components/03-MeetupInfo
+// DONE: Add <UiIcon>
+// DONE: Add date utils
 
-<script>
-// TODO: Task 02-components/03-MeetupInfo
-// TODO: Add <UiIcon>
-// TODO: Add date utils
+import { computed } from 'vue';
+import UiIcon from '@/components/UiIcon.vue';
 
-export default {
-  name: 'MeetupInfo',
-};
+const props = defineProps({
+  organizer: { type: String, required: true },
+  place: { type: String, required: true },
+  date: { type: Number, required: true },
+});
+
+const isoDate = computed(() => new Date(props.date).toISOString().split('T')[0]);
+const localDate = computed(() =>
+  new Date(props.date).toLocaleString(navigator.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }),
+);
 </script>
+
+<template>
+  <ul class="meetup-info">
+    <li>
+      <UiIcon class="icon meetup-info__icon" icon="user" />
+      {{ organizer }}
+    </li>
+    <li>
+      <UiIcon class="icon meetup-info__icon" icon="map" />
+      {{ place }}
+    </li>
+    <li>
+      <UiIcon class="icon meetup-info__icon" alt="icon" icon="cal-lg" />
+      <time :datetime="isoDate">{{ localDate }}</time>
+    </li>
+  </ul>
+</template>
 
 <style scoped>
 /* _meetup-info.css */

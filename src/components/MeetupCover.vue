@@ -1,21 +1,27 @@
 <template>
-  <div>Task 02-components/03-MeetupCover</div>
+  <div class="meetup-cover" :style="[props.image ? `--bg-url: url(${props.image})` : '']">
+    <h1 class="meetup-cover__title">{{ props.title }}</h1>
+  </div>
 </template>
 
-<script>
-// TODO: Task 02-components/03-MeetupCover
+<script setup>
+// DONE: Task 02-components/03-MeetupCover
 
-export default {
-  name: 'MeetupCover',
-};
+import { computed } from 'vue';
+
+const props = defineProps({
+  title: { type: String, required: false },
+  image: { type: String, required: false },
+});
+const bgUrl = computed(() => (props.image ? `url(${props.image})` : 'var(--default-cover)'));
 </script>
 
 <style scoped>
 /* _meetup-cover.css */
-/* TODO: добавить v-bind в css */
+/* DONE: добавить v-bind в css */
 
 .meetup-cover {
-  --bg-url: var(--default-cover);
+  --bg-url: v-bind(bgUrl);
   background-size: cover;
   background-position: center;
   background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--bg-url);

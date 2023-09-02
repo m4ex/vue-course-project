@@ -1,20 +1,21 @@
 <template>
-  <div>Task 02-components/05-MeetupAgenda</div>
+  <ul class="agenda">
+    <li class="agenda__item">
+      <MeetupAgendaItem v-for="item in agenda" :agendaItem="item" />
+    </li>
+  </ul>
 </template>
 
 <script>
-// TODO: Task 02-components/05-MeetupAgenda
+// DONE: Task 02-components/05-MeetupAgenda
+import { defineComponent } from 'vue';
+import MeetupAgendaItem from '@/components/MeetupAgendaItem.vue';
 
-export default {
+export default defineComponent({
   name: 'MeetupAgenda',
-
-  props: {
-    agenda: {
-      type: Array,
-      required: true,
-    },
-  },
-};
+  props: { agenda: { type: Array, required: true } },
+  components: { MeetupAgendaItem },
+});
 </script>
 
 <style scoped>

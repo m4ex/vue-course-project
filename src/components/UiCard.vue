@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" class="card">
     <div class="card__col">
-      <div class="card__cover" :style="cover && { '--bg-url': `url('${cover}')` }">
+      <div class="card__cover">
         <header>
           <slot name="header" />
         </header>
@@ -34,12 +34,17 @@ export default {
       required: false,
     },
   },
+  computed: {
+    bgUrl() {
+      return this.cover ? `url('${this.cover}')` : 'var(--default-cover)';
+    },
+  },
 };
 </script>
 
 <style scoped>
 /* _card.css */
-/* TODO: Добавить v-bind в стили */
+/* DONE: Добавить v-bind в стили */
 .card {
   display: flex;
   flex-direction: row;
@@ -60,7 +65,7 @@ export default {
 }
 
 .card__cover {
-  --bg-url: var(--default-cover);
+  --bg-url: v-bind(bgUrl);
   background-size: cover;
   background-position: center;
   background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--bg-url);

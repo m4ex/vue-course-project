@@ -1,12 +1,44 @@
 <template>
-  <div>Task 04-vue-router/02-TheToaster</div>
+  <div class="toasts">
+    <UIToast v-for="toast in toasts" :key="toast.id" :message="toast.message" :type="toast.type" />
+  </div>
 </template>
 
 <script>
-// TODO: Task 04-vue-router/02-TheToaster
+// DONE: Task 04-vue-router/02-TheToaster
+import UIToast from '@/plugins/toaster/UIToast.vue';
 
 export default {
+  expose: ['success', 'error'],
   name: 'TheToaster',
+  components: { UIToast },
+  data() {
+    return {
+      toasts: [],
+      counter: 0,
+    };
+  },
+  methods: {
+    success(message) {
+      this.newToast(message, 'success', 5000);
+    },
+    error(message) {
+      this.newToast(message, 'error', 5000);
+    },
+    newToast(message, type, timeout) {
+      this.toasts.push({ id: this.counter, type: type, message: message });
+      setTimeout(
+        (id) => {
+          this.toasts = this.toasts.filter(function (obj) {
+            return obj.id !== id;
+          });
+        },
+        timeout,
+        this.counter,
+      );
+      this.counter++;
+    },
+  },
 };
 </script>
 

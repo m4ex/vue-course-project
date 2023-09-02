@@ -1,15 +1,69 @@
-<template>
-  <div>Task 02-components/05-MeetupAgenda</div>
-</template>
+<script setup>
+// DONE: Task 02-components/05-MeetupAgenda
+// DONE: add <UiIcon> component
+import { computed } from 'vue';
+import UiIcon from '@/components/UiIcon.vue';
 
-<script>
-// TODO: Task 02-components/05-MeetupAgenda
-// TODO: add <UiIcon> component
-
-export default {
-  name: 'MeetupAgendaItem',
+/**
+ * Словарь заголовков по умолчанию для всех типов пунктов программы
+ */
+const agendaItemDefaultTitles = {
+  registration: 'Регистрация',
+  opening: 'Открытие',
+  break: 'Перерыв',
+  coffee: 'Coffee Break',
+  closing: 'Закрытие',
+  afterparty: 'Afterparty',
+  talk: 'Доклад',
+  other: 'Другое',
 };
+
+/**
+ * Словарь иконок для всех типов пунктов программы.
+ * Соответствует имени иконок в директории /assets/icons
+ */
+const agendaItemIcons = {
+  registration: 'key',
+  opening: 'cal-sm',
+  talk: 'tv',
+  break: 'clock',
+  coffee: 'coffee',
+  closing: 'key',
+  afterparty: 'cal-sm',
+  other: 'cal-sm',
+};
+
+const props = defineProps({
+  agendaItem: {
+    type: Object,
+    required: true,
+  },
+});
+const title = computed(() =>
+  props.agendaItem.title ? props.agendaItem.title : agendaItemDefaultTitles[props.agendaItem.type],
+);
+const timeInterval = computed(() => `${props.agendaItem.startsAt} - ${props.agendaItem.endsAt}`);
 </script>
+
+<template>
+  <div class="agenda-item">
+    <div class="agenda-item__col">
+      <UiIcon :icon="agendaItemIcons[props.agendaItem.type]" class="icon" />
+    </div>
+    <div class="agenda-item__col">{{ timeInterval }}</div>
+    <div class="agenda-item__col">
+      <h3 class="agenda-item__title">
+        {{ title }}
+      </h3>
+      <p v-if="agendaItem.type === 'talk'" class="agenda-item__talk">
+        <span>{{ agendaItem.speaker }}</span>
+        <span class="agenda-item__dot"></span>
+        <span class="agenda-item__lang"> {{ agendaItem.language }}</span>
+      </p>
+      <p v-if="agendaItem.description">{{ agendaItem.description }}</p>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 /* _agenda-item.css */

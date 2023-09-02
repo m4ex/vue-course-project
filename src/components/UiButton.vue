@@ -1,12 +1,33 @@
 <template>
-  <div><slot /> (Task 06-wrappers/02-UiButton)</div>
+  <component
+    :is="$props.tag"
+    class="button"
+    :type="tag === 'button' ? 'button' : null"
+    :class="{ button_block: $props.block, [`button_${$props.variant}`]: true }"
+  >
+    <slot />
+  </component>
 </template>
 
 <script>
-// TODO: Task 06-wrappers/02-UiButton
+// DONE: Task 06-wrappers/02-UiButton
 
 export default {
   name: 'UiButton',
+  props: {
+    tag: {
+      type: [String, Object],
+      default: 'button',
+    },
+    variant: {
+      type: String,
+      default: 'secondary',
+    },
+    block: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 
