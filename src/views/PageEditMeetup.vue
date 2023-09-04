@@ -1,12 +1,9 @@
 <script setup>
-import { onMounted, ref, watch, watchEffect } from "vue";
 import MeetupForm from '../components/MeetupForm.vue';
 import UiAlert from '../components/UiAlert.vue';
 import UiContainer from '../components/UiContainer.vue';
 import { useTitle } from '@vueuse/core';
 import LayoutMeetupForm from '@/components/LayoutMeetupForm.vue';
-import { useApi } from "@/composables/useApi";
-import { getMeetup, postMeetup, putMeetup } from "@/api/meetupsApi";
 import { router } from "@/router";
 import { useMeetupFetch } from "@/composables/useMeetupFetch";
 import { useMeetupFormSubmit } from "@/composables/useMeetupFormSubmit";

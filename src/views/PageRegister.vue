@@ -35,7 +35,7 @@ const validate = () => {
 };
 
 const toast = useToaster();
-const { request, result } = useApi(registerUser, { successToast: 'Регистрация выполнена успешно', errorToast: true });
+const { request } = useApi(registerUser, { successToast: 'Регистрация выполнена успешно', errorToast: true });
 
 const handleSubmit = async () => {
   const validationError = validate();
@@ -52,8 +52,8 @@ const handleSubmit = async () => {
             - В случае неуспешной регистрации:
               - Вывести тост с текстом ошибки с API
      */
-  await request({ email: email.value, fullname: fullname.value, password: password.value });
-  if (result.value?.success) {
+  const result = await request({ email: email.value, fullname: fullname.value, password: password.value });
+  if (result.success) {
     await router.push({ name: 'login' });
   }
 };
@@ -63,16 +63,23 @@ const handleSubmit = async () => {
   <LayoutAuth>
     <UiForm @submit="handleSubmit">
       <UiFormGroup label="Email">
-        <UiInput v-model="email" name="email" type="email" required autocomplete="username"/>
+        <UiInput v-model="email" name="email" type="email" required autocomplete="username" />
       </UiFormGroup>
       <UiFormGroup label="Имя">
-        <UiInput v-model="fullname" name="fullname" required autocomplete="username"/>
+        <UiInput v-model="fullname" name="fullname" required autocomplete="username" />
       </UiFormGroup>
       <UiFormGroup label="Пароль">
-        <UiInput v-model="password" name="password" type="password" required minlength="6" autocomplete="new-password"/>
+        <UiInput
+          v-model="password"
+          name="password"
+          type="password"
+          required
+          minlength="6"
+          autocomplete="new-password"
+        />
       </UiFormGroup>
       <UiFormGroup label="Повтор пароля">
-        <UiInput v-model="password2" type="password" required minlength="6" autocomplete="new-password"/>
+        <UiInput v-model="password2" type="password" required minlength="6" autocomplete="new-password" />
       </UiFormGroup>
       <UiFormGroup>
         <UiCheckbox v-model="agree" name="agree" required>Я согласен с условиями</UiCheckbox>

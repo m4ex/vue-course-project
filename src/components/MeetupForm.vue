@@ -67,7 +67,7 @@ import UiImageUploader from './UiImageUploader.vue';
 import UiInput from './UiInput.vue';
 import UiInputDate from './UiInputDate.vue';
 import MeetupAgendaItemForm from './MeetupAgendaItemForm.vue';
-import { createAgendaItem } from '../services/meetupService.js';
+import { createAgendaItem } from "@/services/meetupService";
 
 export default {
   name: 'MeetupForm',

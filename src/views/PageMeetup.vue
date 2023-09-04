@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import { ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import MeetupView from '../components/MeetupView.vue';
 import UiContainer from '../components/UiContainer.vue';
 import UiAlert from '../components/UiAlert.vue';
 import UiTabs from '../components/UiTabs.vue';
 import UiTab from '../components/UiTab.vue';
-import { getMeetup } from '../api/meetupsApi.js';
+import { getMeetup } from "@/api/meetupsApi";
 import { useTitle } from "@vueuse/core";
 
 export default {
@@ -62,18 +62,11 @@ export default {
   },
 
   setup(props) {
-    // DONE: Установить <title> - "<название митапа> | Meetups"
     const meetup = ref(null);
     const error = ref(null);
-
-
-    watch(meetup, (value) => {
-      if (value) {
-        useTitle(`${value.title} | Meetups`);
-      } else {
-        useTitle(`Meetups'`);
-      }
-    })
+    // DONE: Установить <title> - "<название митапа> | Meetups"
+    const title = computed(() => meetup.value ? `${meetup.value.title} | Meetups` : 'Meetups');
+    useTitle(title);
 
     const fetchMeetup = async () => {
       meetup.value = null;

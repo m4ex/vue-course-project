@@ -3,11 +3,6 @@ import LayoutBase from './components/LayoutBase.vue';
 import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
 import { useToaster } from '@/plugins/toaster';
-
-import { onMounted, onUnmounted } from 'vue';
-import { router } from '@/router';
-import { getUser, loginUser } from '@/api/authApi';
-import { useApi } from '@/composables/useApi';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 // DONE: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности

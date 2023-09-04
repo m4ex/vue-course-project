@@ -17,12 +17,12 @@ export function useQuerySync(query, defaults = {}) {
 
   watch(
     () => Object.values(query),
-    () => {
+    async () => {
       const newQuery = {};
       for (const key of Object.keys(query)) {
         newQuery[key] = query[key].value !== defaults[key] ? query[key].value : undefined;
       }
-      router.replace({ query: newQuery });
+      await router.replace({ query: newQuery });
     },
     { deep: true },
   );

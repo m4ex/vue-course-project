@@ -40,8 +40,6 @@ export default {
         }
       },
       set() {
-        //Тесты вроде проходят и все работает но как-то меня смущает данная конструкция
-        //по идее нужно хотябы через expose в UIInput ref на input объявить
         this.$emit('update:modelValue', this.$refs.UiInput.$refs.input.valueAsNumber);
       },
     },

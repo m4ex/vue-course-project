@@ -1,7 +1,7 @@
 import { useRouter } from 'vue-router';
 import { useApi } from './useApi.js';
-import { postMeetup, putMeetup } from '../api/meetupsApi.js';
-import { postImage } from '../api/imageApi.js';
+import { postMeetup, putMeetup } from "@/api/meetupsApi";
+import { postImage } from "@/api/imageApi";
 
 export function useMeetupFormSubmit(action) {
   const router = useRouter();
@@ -29,7 +29,7 @@ export function useMeetupFormSubmit(action) {
     }
     const result = await meetupRequest(newMeetup);
     if (result.success) {
-      router.push({ name: 'meetup', params: { meetupId: result.data.id } });
+      await router.push({ name: 'meetup', params: { meetupId: result.data.id } });
     }
   };
 }

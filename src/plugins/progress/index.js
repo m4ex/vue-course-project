@@ -1,7 +1,7 @@
 // DONE:  Task ProgressPlugin
 
 import { createApp, inject } from "vue";
-import TheTopProgressBar from './TheTopProgressBar.vue';
+import TheTopProgressBar from "./TheTopProgressBar.vue";
 
 // Используйте эту константу в качестве ключа provide/inject
 export const PROGRESS_KEY = Symbol("PROGRESS_KEY");
@@ -42,7 +42,7 @@ export function createProgress({ container, router } = {}) {
     });
   }
 
-  const progress = {
+  return {
     start,
     finish,
     fail,
@@ -53,6 +53,4 @@ export function createProgress({ container, router } = {}) {
       app.component("TheTopProgressBar", TheTopProgressBar);
     }
   };
-
-  return progress;
 }

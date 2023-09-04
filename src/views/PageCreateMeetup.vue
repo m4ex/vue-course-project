@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import MeetupForm from '../components/MeetupForm.vue';
-import { createMeetup } from '../services/meetupService.js';
+import { createMeetup } from "@/services/meetupService";
 import { useTitle } from "@vueuse/core";
 import { router } from "@/router";
 import LayoutMeetupForm from "@/components/LayoutMeetupForm.vue";

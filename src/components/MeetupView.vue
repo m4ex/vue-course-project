@@ -22,7 +22,6 @@ const { isAuthenticated } = useAuthStore();
 const {
   isLoading: deleteLoading,
   request: deleteRequest,
-  result: deleteResult,
 } = useApi(deleteMeetup, {
   successToast: 'Митап удалён',
   errorToast: true,
@@ -31,7 +30,6 @@ const {
 const {
   isLoading: attendLoading,
   request: attendRequest,
-  result: attendResult,
 } = useApi(attendMeetup, {
   successToast: 'Сохранено',
   errorToast: true,
@@ -40,7 +38,6 @@ const {
 const {
   isLoading: leaveLoading,
   request: leaveRequest,
-  result: leaveResult,
 } = useApi(leaveMeetup, {
   successToast: 'Сохранено',
   errorToast: true,
@@ -52,13 +49,13 @@ const loading = computed(() => {
 
 const deleteMeetupHandler = async () => {
   console.log('remove meetup', props.meetup.id);
-  await deleteRequest(props.meetup.id);
-  if (deleteResult.value.success) {
+  const result = await deleteRequest(props.meetup.id);
+  if (result.success) {
     await router.push({ name: 'meetups' });
   }
 };
 
-//FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
+//COMMENT FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
 const attending = ref(props.meetup.attending);
 
 const toggleAttending = async () => {

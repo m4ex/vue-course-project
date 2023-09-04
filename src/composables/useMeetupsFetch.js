@@ -1,5 +1,5 @@
 import { onMounted, ref } from 'vue';
-import { getMeetups } from '../api/meetupsApi.js';
+import { getMeetups } from "@/api/meetupsApi";
 
 export function useMeetupsFetch() {
   const meetups = ref(null);

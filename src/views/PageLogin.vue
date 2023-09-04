@@ -31,15 +31,15 @@ useTitle('Вход | Meetups');
 const email = ref('');
 const password = ref('');
 const authStore = useAuthStore();
-const { request, result } = useApi(loginUser, {
+const { request } = useApi(loginUser, {
   successToast: 'Авторизация прошла успешно',
   errorToast: 'Неверные учётные данные...',
 });
 
 const login = async () => {
-  await request({ email: email.value, password: password.value });
-  if (result.value?.success) {
-    authStore.setUser(result.value.data);
+  const result = await request({ email: email.value, password: password.value });
+  if (result.success) {
+    authStore.setUser(result.data);
     await router.push({ name: 'meetups' });
   }
 };
