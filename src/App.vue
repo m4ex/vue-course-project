@@ -16,10 +16,11 @@ if (authStore.isAuthenticated) {
   authStore.refreshUser();
 }
 
-httpClient.onUnauthenticated(() => {
+httpClient.onUnauthenticated(async () => {
   // DONE: сессия пользователя больше не валидна - нужна обработка потери авторизации
-  authStore.setUser(null);
-  router.push({ name: 'login' });
+  console.log('unauthenticated');
+  await authStore.logout();
+  location.reload();
 });
 
 const toast = useToaster();
@@ -30,14 +31,12 @@ httpClient.onNetworkError(() => {
 
 // DONE: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
 // DONE: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
-onMounted(() => window.addEventListener('error', onErrorResponse));
-onUnmounted(() => window.removeEventListener('error', onErrorResponse));
-onMounted(() => window.addEventListener('unhandledrejection', onErrorResponse));
-onUnmounted(() => window.removeEventListener('unhandledrejection', onErrorResponse));
+window.addEventListener('error', (error) => onErrorResponse(error));
+window.addEventListener('unhandledrejection', (event) => onErrorResponse(event.reason));
 
 function onErrorResponse(event) {
-  console.error(event);
-  toast.error(event.reason);
+  console.error("global error handler",event);
+  toast.error(event.message);
 }
 </script>
 
@@ -45,7 +44,8 @@ function onErrorResponse(event) {
   <LayoutBase>
     <RouterView>
       <template #default="{ Component }">
-        <KeepAlive v-if="Component" :max="3">
+        <!-- COMMENT добавил в исключение PageMeetups чтобы корректно отображался статус участия после возврата со страницы митапа -->
+        <KeepAlive v-if="Component" :max="3" exclude="PageMeetups">
           <component :is="Component" />
         </KeepAlive>
       </template>

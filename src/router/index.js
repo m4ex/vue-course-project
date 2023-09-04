@@ -53,6 +53,9 @@ export const routes = [
     meta: {
       requireGuest: true,
     },
+    props: (to) => ({
+      from: to.query.from,
+    }),
     component: () => import("../views/PageLogin.vue"),
   },
   {
@@ -80,6 +83,9 @@ export const routes = [
       requireAuth: true,
     },
     component: () => import('../views/PageEditMeetup.vue'),
+    props: (to) => ({
+      meetupId: +to.params.meetupId,
+    }),
   },
   // DONE: Task 05-vue-router/02-PageNotFound
   {

@@ -77,6 +77,7 @@ export function useApi(apiFunc, { showProgress = false, successToast = false, er
       handleError(error.message)
     }
     isLoading.value = false;
+    return result.value;
   };
 
 

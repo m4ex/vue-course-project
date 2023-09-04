@@ -6,7 +6,8 @@ import UiButton from './UiButton.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useApi } from '@/composables/useApi';
 import { attendMeetup, deleteMeetup, leaveMeetup } from '@/api/meetupsApi';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { router } from '@/router';
 
 const props = defineProps({
   meetup: {
@@ -46,9 +47,28 @@ const {
 });
 
 const loading = computed(() => {
-  return deleteLoading || attendLoading || leaveLoading;
+  return deleteLoading.value || attendLoading.value || leaveLoading.value;
 });
 
+const deleteMeetupHandler = async () => {
+  console.log('remove meetup', props.meetup.id);
+  await deleteRequest(props.meetup.id);
+  if (deleteResult.value.success) {
+    await router.push({ name: 'meetups' });
+  }
+};
+
+//FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
+const attending = ref(props.meetup.attending);
+
+const toggleAttending = async () => {
+  if (attending.value) {
+    await leaveRequest(props.meetup.id);
+  } else {
+    await attendRequest(props.meetup.id);
+  }
+  attending.value = !attending.value;
+};
 /*
   DONE: Добавить тосты при успешных операциях
         - Митап удалён
@@ -76,27 +96,23 @@ const loading = computed(() => {
             <!-- COMMENT: Не понятно зачем тут слот, к чему это?  -->
             <template v-if="meetup.organizing">
               <UiButton
+                tag="RouterLink"
                 variant="primary"
                 :to="{ name: 'editMeetup', params: { meetupId: meetup.id } }"
                 class="meetup__aside-button"
                 >Редактировать
               </UiButton>
-              <UiButton
-                variant="danger"
-                class="meetup__aside-button"
-                :disabled="loading"
-                @click="deleteRequest(meetup.id)"
-              >
+              <UiButton variant="danger" class="meetup__aside-button" :disabled="loading" @click="deleteMeetupHandler">
                 Удалить
               </UiButton>
             </template>
             <template v-else>
               <UiButton
-                v-if="meetup.attending"
+                v-if="attending"
                 variant="secondary"
                 class="meetup__aside-button"
                 :disabled="loading"
-                @click="leaveRequest(meetup.id)"
+                @click="toggleAttending"
               >
                 Отменить участие
               </UiButton>
@@ -105,7 +121,7 @@ const loading = computed(() => {
                 variant="primary"
                 class="meetup__aside-button"
                 :disabled="loading"
-                @click="attendRequest(meetup.id)"
+                @click="toggleAttending"
               >
                 Участвовать
               </UiButton>

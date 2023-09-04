@@ -63,16 +63,16 @@ const handleSubmit = async () => {
   <LayoutAuth>
     <UiForm @submit="handleSubmit">
       <UiFormGroup label="Email">
-        <UiInput v-model="email" name="email" type="email" required />
+        <UiInput v-model="email" name="email" type="email" required autocomplete="username"/>
       </UiFormGroup>
       <UiFormGroup label="Имя">
-        <UiInput v-model="fullname" name="fullname" required />
+        <UiInput v-model="fullname" name="fullname" required autocomplete="username"/>
       </UiFormGroup>
       <UiFormGroup label="Пароль">
-        <UiInput v-model="password" name="password" type="password" required minlength="6" />
+        <UiInput v-model="password" name="password" type="password" required minlength="6" autocomplete="new-password"/>
       </UiFormGroup>
       <UiFormGroup label="Повтор пароля">
-        <UiInput v-model="password2" type="password" required minlength="6" />
+        <UiInput v-model="password2" type="password" required minlength="6" autocomplete="new-password"/>
       </UiFormGroup>
       <UiFormGroup>
         <UiCheckbox v-model="agree" name="agree" required>Я согласен с условиями</UiCheckbox>

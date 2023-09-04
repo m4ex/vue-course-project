@@ -7,5 +7,7 @@ import { httpClient } from './httpClient/httpClient.js';
  */
 export function postImage(file) {
   // DONE: реализовать функцию
-  return httpClient.post('/images/upload', file)
+  const formData = new FormData();
+  formData.append('file', file);
+  return httpClient.post('/images/upload', formData)
 }

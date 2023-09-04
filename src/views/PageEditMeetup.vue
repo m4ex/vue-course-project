@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import MeetupForm from '../components/MeetupForm.vue';
 import UiAlert from '../components/UiAlert.vue';
 import UiContainer from '../components/UiContainer.vue';
@@ -8,6 +8,8 @@ import LayoutMeetupForm from '@/components/LayoutMeetupForm.vue';
 import { useApi } from "@/composables/useApi";
 import { getMeetup, postMeetup, putMeetup } from "@/api/meetupsApi";
 import { router } from "@/router";
+import { useMeetupFetch } from "@/composables/useMeetupFetch";
+import { useMeetupFormSubmit } from "@/composables/useMeetupFormSubmit";
 
 const props = defineProps({
   meetupId: {
@@ -19,26 +21,12 @@ const props = defineProps({
 useTitle('Редактирование митапа | Meetups');
 // DONE: Добавить LayoutMeetupForm
 
-const meetup = ref(null);
-const { request: getRequest, result: getResult } = useApi(getMeetup, {
-  errorToast: true,
-});
-onMounted(async () => {
-  await getRequest(props.meetupId);
-  meetup.value = getResult.data;
-})
+const { meetup } = useMeetupFetch(props.meetupId);
+
 
 // DONE: При сабмите формы редактирования митапа - обновить его через API и перейти на страницу изменённого митапа
-const { request: putRequest, result: putResult } = useApi(putMeetup, {
-  errorToast: true,
-});
+const submitForm = useMeetupFormSubmit('edit')
 
-async function submit() {
-  await putRequest(meetup.value);
-  if (putResult.success) {
-    await router.push({ name: "meetup", params: { meetupId: result.data.id } });
-  }
-}
 // DONE: При нажатии на "Отмена" вернуться на страницу этого митапа
 async function cancel() {
   await router.push({ name: "meetup", params: { meetupId: meetup.value.id } });
@@ -47,7 +35,7 @@ async function cancel() {
 
 <template>
   <LayoutMeetupForm>
-    <MeetupForm v-if="meetup" :meetup="meetup" />
+    <MeetupForm v-if="meetup" :meetup="meetup" @submit="submitForm" @cancel="cancel" submit-text="Сохранить"/>
     <UiContainer v-else>
       <UiAlert>Загрузка...</UiAlert>
     </UiContainer>

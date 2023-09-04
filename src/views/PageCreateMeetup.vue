@@ -4,8 +4,8 @@ import MeetupForm from '../components/MeetupForm.vue';
 import { createMeetup } from '../services/meetupService.js';
 import { useTitle } from "@vueuse/core";
 import { router } from "@/router";
-import { useApi } from "@/composables/useApi";
-import { postMeetup } from "@/api/meetupsApi";
+import LayoutMeetupForm from "@/components/LayoutMeetupForm.vue";
+import { useMeetupFormSubmit } from "@/composables/useMeetupFormSubmit";
 
 
 // DONE: title "Создание митапа | Meetups"
@@ -14,27 +14,17 @@ useTitle("Создание митапа | Meetups")
 const meetup = ref(createMeetup());
 
 // DONE: При сабмите формы создания митапа - добавить его через API и перейти на страницу созданного митапа
-const { request, result } = useApi(postMeetup, {
-  errorToast: true,
-});
-
-async function submit() {
-  await request(meetup.value);
-  if (result.success) {
-    await router.push({ name: "meetup", params: { meetupId: result.data.id } });
-  }
-}
+const submitForm = useMeetupFormSubmit('create')
 
 // DONE: При нажатии на "Отмена" вернуться на главную страницу
 function cancel() {
   router.push({ name: 'index' });
 }
-
 </script>
 
 <template>
   <LayoutMeetupForm>
-    <MeetupForm :meetup="meetup" @submit="submit" @cancel="cancel" />
+    <MeetupForm :meetup="meetup" @submit="submitForm" @cancel="cancel" submit-text="Создать" />
   </LayoutMeetupForm>
 </template>
 

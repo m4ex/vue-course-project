@@ -9,7 +9,7 @@
 
 export default {
   name: 'UiTab',
-  props: { to: { type: String, required: true } },
+  props: { to: { type: [String, Object], required: true } },
 };
 </script>
 

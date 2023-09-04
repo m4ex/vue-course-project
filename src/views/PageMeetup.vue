@@ -3,8 +3,8 @@
     <MeetupView v-if="meetup" :meetup="meetup">
       <UiTabs>
         <template #tabs>
-          <UiTab :to="{ name: 'meetup.description' }">Описание</UiTab>
-          <UiTab :to="{ name: 'meetup.agenda' }">Программа</UiTab>
+          <UiTab :to="{ name: 'meetup.description',  params: { meetupId } }">Описание</UiTab>
+          <UiTab :to="{ name: 'meetup.agenda',  params: { meetupId } }">Программа</UiTab>
         </template>
         <template #default>
           <RouterView :meetup="meetup" />
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from "vue";
 import MeetupView from '../components/MeetupView.vue';
 import UiContainer from '../components/UiContainer.vue';
 import UiAlert from '../components/UiAlert.vue';
@@ -87,7 +87,11 @@ export default {
       }
     };
 
-    watch(() => props.meetupId, fetchMeetup);
+    watchEffect(() => {
+      if (props.meetupId) {
+        fetchMeetup();
+      }
+    });
 
     const setMeetup = (value) => (meetup.value = value);
 

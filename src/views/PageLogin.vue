@@ -49,10 +49,17 @@ const login = async () => {
   <LayoutAuth>
     <UiForm @submit="login">
       <UiFormGroup label="Email">
-        <UiInput v-model="email" name="email" type="email" placeholder="demo@email" required />
+        <UiInput v-model="email" name="email" type="email" placeholder="demo@email" required autocomplete="username" />
       </UiFormGroup>
       <UiFormGroup label="Пароль">
-        <UiInput v-model="password" name="password" type="password" placeholder="password" required />
+        <UiInput
+          v-model="password"
+          name="password"
+          type="password"
+          placeholder="password"
+          required
+          autocomplete="current-password"
+        />
       </UiFormGroup>
 
       <template #buttons>
