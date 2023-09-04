@@ -1,3 +1,63 @@
+<script setup>
+import MeetupCover from './MeetupCover.vue';
+import MeetupInfo from './MeetupInfo.vue';
+import UiContainer from './UiContainer.vue';
+import UiButton from './UiButton.vue';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useApi } from '@/composables/useApi';
+import { attendMeetup, deleteMeetup, leaveMeetup } from '@/api/meetupsApi';
+import { computed } from 'vue';
+
+const props = defineProps({
+  meetup: {
+    type: Object,
+    required: true,
+  },
+});
+
+// DONE: Добавить обработку кнопок, включая работу с API
+const { isAuthenticated } = useAuthStore();
+
+const {
+  isLoading: deleteLoading,
+  request: deleteRequest,
+  result: deleteResult,
+} = useApi(deleteMeetup, {
+  successToast: 'Митап удалён',
+  errorToast: true,
+});
+
+const {
+  isLoading: attendLoading,
+  request: attendRequest,
+  result: attendResult,
+} = useApi(attendMeetup, {
+  successToast: 'Сохранено',
+  errorToast: true,
+});
+
+const {
+  isLoading: leaveLoading,
+  request: leaveRequest,
+  result: leaveResult,
+} = useApi(leaveMeetup, {
+  successToast: 'Сохранено',
+  errorToast: true,
+});
+
+const loading = computed(() => {
+  return deleteLoading || attendLoading || leaveLoading;
+});
+
+/*
+  DONE: Добавить тосты при успешных операциях
+        - Митап удалён
+        - Сохранено
+        - Текст ошибки в случае ошибки на API
+ */
+// DONE: Будет плюсом блокировать кнопку на время загрузки
+</script>
+
 <template>
   <div>
     <MeetupCover :title="meetup.title" :image="meetup.image" />
@@ -9,56 +69,53 @@
         </div>
         <div class="meetup__aside">
           <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />
-          <!-- TODO: Добавить проверку на аутентификацию и является ли пользователь организатором митапа -->
-          <!-- TODO: Реализовать кнопки (некоторые должны быть ссылками) -->
-          <div class="meetup__aside-buttons">
-            <!-- TODO: Может добавить тут слот? -->
-            <UiButton variant="primary" class="meetup__aside-button">Редактировать</UiButton>
-            <UiButton variant="danger" class="meetup__aside-button">Удалить</UiButton>
-            <UiButton variant="secondary" class="meetup__aside-button">Отменить участие</UiButton>
-            <UiButton variant="primary" class="meetup__aside-button"> Участвовать </UiButton>
+          <!-- DONE: Добавить проверку на аутентификацию и является ли пользователь организатором митапа -->
+          <!-- DONE: Реализовать кнопки (некоторые должны быть ссылками) -->
+          <div v-if="isAuthenticated" class="meetup__aside-buttons">
+            <!-- DONE: Может добавить тут слот? -->
+            <!-- COMMENT: Не понятно зачем тут слот, к чему это?  -->
+            <template v-if="meetup.organizing">
+              <UiButton
+                variant="primary"
+                :to="{ name: 'editMeetup', params: { meetupId: meetup.id } }"
+                class="meetup__aside-button"
+                >Редактировать
+              </UiButton>
+              <UiButton
+                variant="danger"
+                class="meetup__aside-button"
+                :disabled="loading"
+                @click="deleteRequest(meetup.id)"
+              >
+                Удалить
+              </UiButton>
+            </template>
+            <template v-else>
+              <UiButton
+                v-if="meetup.attending"
+                variant="secondary"
+                class="meetup__aside-button"
+                :disabled="loading"
+                @click="leaveRequest(meetup.id)"
+              >
+                Отменить участие
+              </UiButton>
+              <UiButton
+                v-else
+                variant="primary"
+                class="meetup__aside-button"
+                :disabled="loading"
+                @click="attendRequest(meetup.id)"
+              >
+                Участвовать
+              </UiButton>
+            </template>
           </div>
         </div>
       </div>
     </UiContainer>
   </div>
 </template>
-
-<script>
-import MeetupCover from './MeetupCover.vue';
-import MeetupInfo from './MeetupInfo.vue';
-import UiContainer from './UiContainer.vue';
-import UiButton from './UiButton.vue';
-
-export default {
-  name: 'MeetupView',
-
-  components: {
-    UiButton,
-    MeetupCover,
-    MeetupInfo,
-    UiContainer,
-  },
-
-  props: {
-    meetup: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  setup() {
-    // TODO: Добавить обработку кнопок, включая работу с API
-    /*
-      TODO: Добавить тосты при успешных операциях
-            - Митап удалён
-            - Сохранено
-            - Текст ошибки в случае ошибки на API
-     */
-    // TODO: Будет плюсом блокировать кнопку на время загрузки
-  },
-};
-</script>
 
 <style scoped>
 .meetup {

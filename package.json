@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@vueuse/core": "^10.4.1",
     "axios": "^1.2.2",
     "dayjs": "^1.11.9",
     "gsap": "^3.11.4",

@@ -30,6 +30,7 @@ import UiAlert from '../components/UiAlert.vue';
 import UiTabs from '../components/UiTabs.vue';
 import UiTab from '../components/UiTab.vue';
 import { getMeetup } from '../api/meetupsApi.js';
+import { useTitle } from "@vueuse/core";
 
 export default {
   name: 'PageMeetup',
@@ -61,9 +62,18 @@ export default {
   },
 
   setup(props) {
-    // TODO: Установить <title> - "<название митапа> | Meetups"
+    // DONE: Установить <title> - "<название митапа> | Meetups"
     const meetup = ref(null);
     const error = ref(null);
+
+
+    watch(meetup, (value) => {
+      if (value) {
+        useTitle(`${value.title} | Meetups`);
+      } else {
+        useTitle(`Meetups'`);
+      }
+    })
 
     const fetchMeetup = async () => {
       meetup.value = null;

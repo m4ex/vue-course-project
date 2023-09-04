@@ -1,3 +1,63 @@
+<script setup>
+import { computed, ref, toRefs } from "vue";
+import MeetupsList from '../components/MeetupsList.vue';
+import MeetupsCalendar from '../components/MeetupsCalendar.vue';
+import UiRadioGroup from '../components/UiRadioGroup.vue';
+import UiButtonGroup from '../components/UiButtonGroup.vue';
+import UiContainer from '../components/UiContainer.vue';
+import UiAlert from '../components/UiAlert.vue';
+import UiIcon from '../components/UiIcon.vue';
+import UiButtonGroupItem from '../components/UiButtonGroupItem.vue';
+import UiFormGroup from '../components/UiFormGroup.vue';
+import UiInput from '../components/UiInput.vue';
+import { useMeetupsFetch } from "@/composables/useMeetupsFetch";
+import { useMeetupsFilter } from "@/composables/useMeetupsFilter";
+import { useQuerySync } from "@/composables/useQuerySync";
+import { useTitle } from "@vueuse/core";
+
+// DONE: Установить <title> - "Meetups"
+// COMMENT: Перенес из App.vue, тут менять title правильнее, так он будет корректно
+// выставляться например при возврате со страницы отдельного митапа.
+useTitle('Meetups');
+
+const { meetups } = useMeetupsFetch();
+
+const { filteredMeetups, filter, dateFilterOptions } = useMeetupsFilter(meetups);
+
+const view = ref('list');
+/*
+   DONE: Добавить синхронизацию фильтров и view с одноимёнными query параметрами
+         - Измерение параметров фильтрации и view должны изменять query параметры маршрута
+           - date, participation, search, view
+         - При значениях по умолчанию (all, list) query параметр добавляться не должен
+         - Изменение query параметров маршрута должно приводить к изменению
+         - Вынесите эту логику в универсальный компосабл useQuerySync
+         - Будущая задача composition/useQuerySync
+ */
+
+useQuerySync(
+  {
+    ...toRefs(filter.value),
+    view,
+  },
+  {
+    participation: 'all',
+    date: 'all',
+    search: '',
+    view: 'list',
+  },
+);
+
+
+const viewComponent = computed(() => {
+  const viewToComponents = {
+    list: MeetupsList,
+    calendar: MeetupsCalendar,
+  };
+  return viewToComponents[view.value];
+});
+</script>
+
 <template>
   <UiContainer>
     <div class="filters-panel">
@@ -45,74 +105,6 @@
     <UiAlert v-else>Загрузка...</UiAlert>
   </UiContainer>
 </template>
-
-<script>
-import { computed, ref } from 'vue';
-import MeetupsList from '../components/MeetupsList.vue';
-import MeetupsCalendar from '../components/MeetupsCalendar.vue';
-import UiRadioGroup from '../components/UiRadioGroup.vue';
-import UiButtonGroup from '../components/UiButtonGroup.vue';
-import UiContainer from '../components/UiContainer.vue';
-import UiAlert from '../components/UiAlert.vue';
-import UiIcon from '../components/UiIcon.vue';
-import UiButtonGroupItem from '../components/UiButtonGroupItem.vue';
-import UiFormGroup from '../components/UiFormGroup.vue';
-import UiInput from '../components/UiInput.vue';
-import UiTransitionGroupFade from '../components/UiTransitionGroupFade.vue';
-import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
-import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
-
-export default {
-  name: 'PageMeetups',
-
-  components: {
-    UiTransitionGroupFade,
-    UiInput,
-    UiFormGroup,
-    UiButtonGroupItem,
-    UiIcon,
-    UiRadioGroup,
-    UiButtonGroup,
-    UiContainer,
-    UiAlert,
-  },
-
-  setup() {
-    const { meetups } = useMeetupsFetch();
-
-    const { filteredMeetups, filter, dateFilterOptions } = useMeetupsFilter(meetups);
-
-    const view = ref('list');
-
-    /*
-       TODO: Добавить синхронизацию фильтров и view с одноимёнными query параметрами
-             - Измерение параметров фильтрации и view должны изменять query параметры маршрута
-               - date, participation, search, view
-             - При значениях по умолчанию (all, list) query параметр добавляться не должен
-             - Изменение query параметров маршрута должно приводить к изменению
-             - Вынесите эту логику в универсальный компосабл useQuerySync
-             - Будущая задача composition/useQuerySync
-     */
-
-    const viewComponent = computed(() => {
-      const viewToComponents = {
-        list: MeetupsList,
-        calendar: MeetupsCalendar,
-      };
-      return viewToComponents[view.value];
-    });
-
-    return {
-      meetups,
-      filter,
-      filteredMeetups,
-      dateFilterOptions,
-      view,
-      viewComponent,
-    };
-  },
-};
-</script>
 
 <style scoped>
 .filters-panel {

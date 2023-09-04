@@ -1,3 +1,46 @@
+<script setup>
+import LayoutBase from './components/LayoutBase.vue';
+import UiAlert from './components/UiAlert.vue';
+import { httpClient } from './api/httpClient/httpClient.js';
+import { useToaster } from '@/plugins/toaster';
+
+import { onMounted, onUnmounted } from 'vue';
+import { router } from '@/router';
+import { getUser, loginUser } from '@/api/authApi';
+import { useApi } from '@/composables/useApi';
+import { useAuthStore } from '@/stores/useAuthStore';
+
+// DONE: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
+const authStore = useAuthStore();
+if (authStore.isAuthenticated) {
+  authStore.refreshUser();
+}
+
+httpClient.onUnauthenticated(() => {
+  // DONE: сессия пользователя больше не валидна - нужна обработка потери авторизации
+  authStore.setUser(null);
+  router.push({ name: 'login' });
+});
+
+const toast = useToaster();
+httpClient.onNetworkError(() => {
+  // DONE: проблема с сетью, стоит вывести тост пользователю
+  toast.error('Ошибка сети');
+});
+
+// DONE: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
+// DONE: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
+onMounted(() => window.addEventListener('error', onErrorResponse));
+onUnmounted(() => window.removeEventListener('error', onErrorResponse));
+onMounted(() => window.addEventListener('unhandledrejection', onErrorResponse));
+onUnmounted(() => window.removeEventListener('unhandledrejection', onErrorResponse));
+
+function onErrorResponse(event) {
+  console.error(event);
+  toast.error(event.reason);
+}
+</script>
+
 <template>
   <LayoutBase>
     <RouterView>
@@ -12,38 +55,6 @@
     </RouterView>
   </LayoutBase>
 </template>
-
-<script>
-import LayoutBase from './components/LayoutBase.vue';
-import UiAlert from './components/UiAlert.vue';
-import { httpClient } from './api/httpClient/httpClient.js';
-
-export default {
-  name: 'App',
-
-  components: {
-    UiAlert,
-    LayoutBase,
-  },
-
-  setup() {
-    // TODO: Установить <title> - "Meetups"
-
-    // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
-
-    httpClient.onUnauthenticated(() => {
-      // TODO: сессия пользователя больше не валидна - нужна обработка потери авторизации
-    });
-
-    httpClient.onNetworkError(() => {
-      // TODO: проблема с сетью, стоит вывести тост пользователю
-    });
-
-    // TODO: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
-    // TODO: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
-  },
-};
-</script>
 
 <style>
 /* Основные глобальные стили - не scoped стили  */

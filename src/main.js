@@ -11,7 +11,8 @@ import { createToaster } from './plugins/toaster/index.js';
 import { createProgress } from './plugins/progress/index.js';
 
 
-// TODO: установить плагины: router, pinia, head(title), toaster, progress
+// DONE: установить плагины: router, pinia, head(title), toaster, progress
+// вместо head(title) будет useTitle from '@vueuse/core'
 const app = createApp(App);
 app.use(router);
 app.use(createPinia());

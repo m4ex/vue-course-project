@@ -1,3 +1,10 @@
+<script setup>
+import UiContainer from '../components/UiContainer.vue';
+import { useTitle } from "@vueuse/core";
+// DONE: <title> "Страница не найдена | Meetups"
+useTitle('Страница не найдена | Meetups');
+</script>
+
 <template>
   <div class="page-error">
     <UiContainer>
@@ -8,22 +15,6 @@
     </UiContainer>
   </div>
 </template>
-
-<script>
-import UiContainer from '../components/UiContainer.vue';
-
-export default {
-  name: 'PageNotFound',
-
-  components: {
-    UiContainer,
-  },
-
-  setup() {
-    // TODO: <title> "Страница не найдена | Meetups"
-  },
-};
-</script>
 
 <style scoped>
 /* page_not-found.css */
