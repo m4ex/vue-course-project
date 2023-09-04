@@ -22,7 +22,7 @@
       >
         <div class="calendar-view__cell-day">{{ i.day }}</div>
         <div class="calendar-view__cell-content">
-          <slot :date="i.d" />
+          <slot :date="i.day" :timestamp="i.timestamp" />
         </div>
       </div>
     </div>
@@ -73,17 +73,17 @@ export default {
         daysArray.push({
           day: this.lastDayOfPreviousMonth.subtract(i, 'day').date(),
           thisMonth: false,
-          d: this.formatDate(this.lastDayOfPreviousMonth.subtract(i, 'day')),
+          timestamp: this.formatDate(this.lastDayOfPreviousMonth.subtract(i, 'day')),
         });
       }
       for (let i = 1; i <= this.lastDayOfMonth.date(); i += 1) {
-        daysArray.push({ day: i, thisMonth: true, d: this.formatDate(this.firstDayOfMonth.add(i - 1, 'day')) });
+        daysArray.push({ day: i, thisMonth: true, timestamp: this.formatDate(this.firstDayOfMonth.add(i - 1, 'day')) });
       }
       for (let i = 1; i <= 6 - this.lastDayOfWeekIndex; i += 1) {
         daysArray.push({
           day: i,
           thisMonth: false,
-          d: this.formatDate(this.firstDayOfMonth.add(1, 'month').add(i - 1, 'day')),
+          timestamp: this.formatDate(this.firstDayOfMonth.add(1, 'month').add(i - 1, 'day')),
         });
       }
       return daysArray;
@@ -95,9 +95,6 @@ export default {
     },
     previousMonth() {
       this.selectedDate = this.selectedDate.subtract(1, 'month');
-    },
-    getMeetupUrl(meetup) {
-      return `/meetups/${meetup.id}`;
     },
     formatDate(date) {
       return +date.toDate();
