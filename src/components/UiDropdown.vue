@@ -4,7 +4,7 @@
 import UiIcon from './UiIcon.vue';
 import { computed, ref } from "vue";
 
-const emit = computed(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
   options: { type: Array, required: true },
   modelValue: { type: String, required: false },

@@ -22,7 +22,7 @@ import { reactive, ref, watch } from "vue";
 const commonAgendaItemFormSchema = {
   title: {
     label: 'Нестандартный текст (необязательно)',
-    component: 'ui-input',
+    component: UiInput,
     props: {
       name: 'title',
     },
@@ -36,21 +36,21 @@ const agendaItemFormSchemas = {
   talk: {
     title: {
       label: 'Тема',
-      component: 'ui-input',
+      component: UiInput,
       props: {
         name: 'title',
       },
     },
     speaker: {
       label: 'Докладчик',
-      component: 'ui-input',
+      component: UiInput,
       props: {
         name: 'speaker',
       },
     },
     description: {
       label: 'Описание',
-      component: 'ui-input',
+      component: UiInput,
       props: {
         multiline: true,
         name: 'description',
@@ -58,7 +58,7 @@ const agendaItemFormSchemas = {
     },
     language: {
       label: 'Язык',
-      component: 'ui-dropdown',
+      component: UiDropdown,
       props: {
         options: talkLanguageOptions,
         title: 'Язык',
@@ -73,14 +73,14 @@ const agendaItemFormSchemas = {
   other: {
     title: {
       label: 'Заголовок',
-      component: 'ui-input',
+      component: UiInput,
       props: {
         name: 'title',
       },
     },
     description: {
       label: 'Описание',
-      component: 'ui-input',
+      component: UiInput,
       props: {
         multiline: true,
         name: 'description',
