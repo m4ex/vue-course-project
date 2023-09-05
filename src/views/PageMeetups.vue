@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs } from 'vue';
 import MeetupsList from '../components/MeetupsList.vue';
 import MeetupsCalendar from '../components/MeetupsCalendar.vue';
 import UiRadioGroup from '../components/UiRadioGroup.vue';
@@ -10,14 +10,13 @@ import UiIcon from '../components/UiIcon.vue';
 import UiButtonGroupItem from '../components/UiButtonGroupItem.vue';
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiInput from '../components/UiInput.vue';
-import { useMeetupsFetch } from "@/composables/useMeetupsFetch";
-import { useMeetupsFilter } from "@/composables/useMeetupsFilter";
-import { useQuerySync } from "@/composables/useQuerySync";
-import { useTitle } from "@vueuse/core";
+import { useMeetupsFetch } from '@/composables/useMeetupsFetch';
+import { useMeetupsFilter } from '@/composables/useMeetupsFilter';
+import { useQuerySync } from '@/composables/useQuerySync';
+import { useTitle } from '@vueuse/core';
 
 // DONE: Установить <title> - "Meetups"
-// COMMENT: Перенес из App.vue, тут менять title правильнее, так он будет корректно
-// выставляться например при возврате со страницы отдельного митапа.
+// TODO MYCOMMENT: Перенес из App.vue, тут менять title правильнее, так он будет корректно выставляться например при возврате со страницы отдельного митапа.
 useTitle('Meetups');
 
 const { meetups } = useMeetupsFetch();
@@ -47,7 +46,6 @@ useQuerySync(
     view: 'list',
   },
 );
-
 
 const viewComponent = computed(() => {
   const viewToComponents = {

@@ -30,7 +30,6 @@ const modelValueProxy = computed({
     }
   },
   set: () => {
-    // TODO проверить работу
     emit('update:modelValue', UiInputRef.value.$refs.input.valueAsNumber);
   },
 });

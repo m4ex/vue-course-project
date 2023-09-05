@@ -55,7 +55,7 @@ const deleteMeetupHandler = async () => {
   }
 };
 
-// MYCOMMENT FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
+// TODO MYCOMMENT: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
 const attending = ref(props.meetup.attending);
 
 const toggleAttending = async () => {
@@ -89,8 +89,8 @@ const toggleAttending = async () => {
           <!-- DONE: Добавить проверку на аутентификацию и является ли пользователь организатором митапа -->
           <!-- DONE: Реализовать кнопки (некоторые должны быть ссылками) -->
           <div v-if="isAuthenticated" class="meetup__aside-buttons">
-            <!-- DONE: Может добавить тут слот? -->
-            <!-- COMMENT: Не понятно зачем тут слот, к чему это?  -->
+            <!-- TODO: Может добавить тут слот? -->
+            <!-- TODO MYCOMMENT: Я так и не понял зачем тут упоминается слот, к чему это?  -->
             <template v-if="meetup.organizing">
               <UiButton
                 tag="RouterLink"
