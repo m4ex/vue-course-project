@@ -1,37 +1,32 @@
+<script setup>
+import UiIcon from '@/components/UiIcon.vue';
+import { computed } from 'vue';
+
+const props = defineProps({
+  type: { type: String, required: true },
+  message: { type: String, required: true },
+});
+const typeClass = computed(() => {
+  return `toast_${props.type}`;
+});
+const icon = computed(() => {
+  switch (props.type) {
+    case 'error':
+      return 'alert-circle';
+    case 'success':
+      return 'check-circle';
+    default:
+      return '';
+  }
+});
+</script>
+
 <template>
   <div class="toast" :class="typeClass">
     <UiIcon class="toast__icon" :icon="icon" />
     <span>{{ message }}</span>
   </div>
 </template>
-
-<script>
-import UiIcon from '@/components/UiIcon.vue';
-
-export default {
-  name: 'UIToast',
-  props: {
-    type: { type: String, required: true },
-    message: { type: String, required: true },
-  },
-  computed: {
-    typeClass() {
-      return `toast_${this.type}`;
-    },
-    icon() {
-      switch (this.type) {
-        case 'error':
-          return 'alert-circle';
-        case 'success':
-          return 'check-circle';
-        default:
-          return '';
-      }
-    },
-  },
-  components: { UiIcon },
-};
-</script>
 
 <style scoped>
 .toast {

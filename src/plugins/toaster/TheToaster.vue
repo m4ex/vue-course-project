@@ -1,46 +1,41 @@
+<script setup>
+// DONE: Task 04-vue-router/02-TheToaster
+import UIToast from '@/plugins/toaster/UIToast.vue';
+import { ref } from 'vue';
+
+defineExpose({ success, error });
+
+const toasts = ref([]);
+const counter = ref(0);
+
+function success(message) {
+  newToast(message, 'success', 5000);
+}
+
+function error(message) {
+  newToast(message, 'error', 5000);
+}
+
+function newToast(message, type, timeout) {
+  toasts.value.push({ id: counter.value, type: type, message: message });
+  setTimeout(
+    (id) => {
+      toasts.value = toasts.value.filter(function (obj) {
+        return obj.id !== id;
+      });
+    },
+    timeout,
+    counter.value,
+  );
+  counter.value = counter.value++;
+}
+</script>
+
 <template>
   <div class="toasts">
     <UIToast v-for="toast in toasts" :key="toast.id" :message="toast.message" :type="toast.type" />
   </div>
 </template>
-
-<script>
-// DONE: Task 04-vue-router/02-TheToaster
-import UIToast from '@/plugins/toaster/UIToast.vue';
-
-export default {
-  expose: ['success', 'error'],
-  name: 'TheToaster',
-  components: { UIToast },
-  data() {
-    return {
-      toasts: [],
-      counter: 0,
-    };
-  },
-  methods: {
-    success(message) {
-      this.newToast(message, 'success', 5000);
-    },
-    error(message) {
-      this.newToast(message, 'error', 5000);
-    },
-    newToast(message, type, timeout) {
-      this.toasts.push({ id: this.counter, type: type, message: message });
-      setTimeout(
-        (id) => {
-          this.toasts = this.toasts.filter(function (obj) {
-            return obj.id !== id;
-          });
-        },
-        timeout,
-        this.counter,
-      );
-      this.counter++;
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _toaster.css */
