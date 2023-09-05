@@ -1,20 +1,3 @@
-<template>
-  <div class="radio-group">
-    <div v-for="option in options" :key="option.value" class="radio-group__button">
-      <input
-        :id="`radio-group_${name}_${option.value}`"
-        class="radio-group__input"
-        type="radio"
-        :name="name"
-        :value="options.value"
-        :checked="option.value === modelValue"
-        @change="() => change(option.value)"
-      />
-      <label :for="`radio-group_${name}_${option.value}`" class="radio-group__label">{{ option.text }}</label>
-    </div>
-  </div>
-</template>
-
 <script setup>
 defineProps({
   options: {
@@ -38,6 +21,23 @@ const change = (value) => {
   emit('update:modelValue', value);
 };
 </script>
+
+<template>
+  <div class="radio-group">
+    <div v-for="option in options" :key="option.value" class="radio-group__button">
+      <input
+        :id="`radio-group_${name}_${option.value}`"
+        class="radio-group__input"
+        type="radio"
+        :name="name"
+        :value="options.value"
+        :checked="option.value === modelValue"
+        @change="() => change(option.value)"
+      />
+      <label :for="`radio-group_${name}_${option.value}`" class="radio-group__label">{{ option.text }}</label>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 /* _radio-group.css */

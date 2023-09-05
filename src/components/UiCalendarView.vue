@@ -1,3 +1,70 @@
+<script setup>
+// DONE: Task 10-slots/03-UiCalendarView
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { computed, ref } from 'vue';
+
+dayjs.extend(utc);
+
+const selectedDate = ref(new dayjs().utc());
+
+const selectedMonth = computed(() => {
+  return selectedDate.value.toDate().toLocaleDateString(navigator.language, {
+    month: 'long',
+    year: 'numeric',
+  });
+});
+const firstDayOfMonth = computed(() => {
+  return selectedDate.value.startOf('month');
+});
+const lastDayOfMonth = computed(() => {
+  return selectedDate.value.endOf('month').startOf('day');
+});
+const lastDayOfPreviousMonth = computed(() => {
+  return selectedDate.value.subtract(1, 'months').endOf('month').startOf('day');
+});
+const firstDayOfWeekIndex = computed(() => {
+  return firstDayOfMonth.value.day() === 0 ? 6 : firstDayOfMonth.value.day() - 1;
+});
+const lastDayOfWeekIndex = computed(() => {
+  return lastDayOfMonth.value.day() === 0 ? 6 : lastDayOfMonth.value.day() - 1;
+});
+const daysArray = computed(() => {
+  const daysArray = [];
+  for (let i = firstDayOfWeekIndex.value - 1; i >= 0; i -= 1) {
+    daysArray.push({
+      day: lastDayOfPreviousMonth.value.subtract(i, 'day').date(),
+      thisMonth: false,
+      timestamp: formatDate(lastDayOfPreviousMonth.value.subtract(i, 'day')),
+    });
+  }
+  for (let i = 1; i <= lastDayOfMonth.value.date(); i += 1) {
+    daysArray.push({ day: i, thisMonth: true, timestamp: formatDate(firstDayOfMonth.value.add(i - 1, 'day')) });
+  }
+  for (let i = 1; i <= 6 - lastDayOfWeekIndex.value; i += 1) {
+    daysArray.push({
+      day: i,
+      thisMonth: false,
+      timestamp: formatDate(firstDayOfMonth.value.add(1, 'month').add(i - 1, 'day'))
+    });
+  }
+  return daysArray;
+});
+
+function nextMonth() {
+  selectedDate.value = selectedDate.value.add(1, 'month');
+}
+
+function previousMonth() {
+  selectedDate.value = selectedDate.value.subtract(1, 'month');
+}
+
+function formatDate(date) {
+  return +date.toDate();
+}
+</script>
+
 <template>
   <div class="calendar-view">
     <div class="calendar-view__controls">
@@ -28,80 +95,6 @@
     </div>
   </div>
 </template>
-
-<script>
-// DONE: Task 10-slots/03-UiCalendarView
-
-import dayjs from 'dayjs';
-import UiAlert from '@/components/UiAlert.vue';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
-export default {
-  name: 'UiCalendarView',
-  components: { UiAlert },
-  data() {
-    return {
-      selectedDate: new dayjs().utc(),
-    };
-  },
-  computed: {
-    selectedMonth() {
-      return this.selectedDate.toDate().toLocaleDateString(navigator.language, {
-        month: 'long',
-        year: 'numeric',
-      });
-    },
-    firstDayOfMonth() {
-      return this.selectedDate.startOf('month');
-    },
-    lastDayOfMonth() {
-      return this.selectedDate.endOf('month').startOf('day');
-    },
-    lastDayOfPreviousMonth() {
-      return this.selectedDate.subtract(1, 'months').endOf('month').startOf('day');
-    },
-    firstDayOfWeekIndex() {
-      return this.firstDayOfMonth.day() === 0 ? 6 : this.firstDayOfMonth.day() - 1;
-    },
-    lastDayOfWeekIndex() {
-      return this.lastDayOfMonth.day() === 0 ? 6 : this.lastDayOfMonth.day() - 1;
-    },
-    daysArray() {
-      const daysArray = [];
-      for (let i = this.firstDayOfWeekIndex - 1; i >= 0; i -= 1) {
-        daysArray.push({
-          day: this.lastDayOfPreviousMonth.subtract(i, 'day').date(),
-          thisMonth: false,
-          timestamp: this.formatDate(this.lastDayOfPreviousMonth.subtract(i, 'day')),
-        });
-      }
-      for (let i = 1; i <= this.lastDayOfMonth.date(); i += 1) {
-        daysArray.push({ day: i, thisMonth: true, timestamp: this.formatDate(this.firstDayOfMonth.add(i - 1, 'day')) });
-      }
-      for (let i = 1; i <= 6 - this.lastDayOfWeekIndex; i += 1) {
-        daysArray.push({
-          day: i,
-          thisMonth: false,
-          timestamp: this.formatDate(this.firstDayOfMonth.add(1, 'month').add(i - 1, 'day')),
-        });
-      }
-      return daysArray;
-    },
-  },
-  methods: {
-    nextMonth() {
-      this.selectedDate = this.selectedDate.add(1, 'month');
-    },
-    previousMonth() {
-      this.selectedDate = this.selectedDate.subtract(1, 'month');
-    },
-    formatDate(date) {
-      return +date.toDate();
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _calendar-view.css */

@@ -1,3 +1,10 @@
+<script setup>
+// DONE: Task 02-components/05-MeetupAgenda
+import MeetupAgendaItem from '@/components/MeetupAgendaItem.vue';
+
+defineProps({ agenda: { type: Array, required: true } });
+</script>
+
 <template>
   <ul class="agenda">
     <li class="agenda__item">
@@ -5,18 +12,6 @@
     </li>
   </ul>
 </template>
-
-<script>
-// DONE: Task 02-components/05-MeetupAgenda
-import { defineComponent } from 'vue';
-import MeetupAgendaItem from '@/components/MeetupAgendaItem.vue';
-
-export default defineComponent({
-  name: 'MeetupAgenda',
-  props: { agenda: { type: Array, required: true } },
-  components: { MeetupAgendaItem },
-});
-</script>
 
 <style scoped>
 /* _agenda.css */

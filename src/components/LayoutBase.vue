@@ -1,3 +1,8 @@
+<script setup>
+import MeetupsHeader from './MeetupsHeader.vue';
+import MeetupsFooter from './MeetupsFooter.vue';
+</script>
+
 <template>
   <div class="wrapper">
     <MeetupsHeader />
@@ -7,20 +12,6 @@
     <MeetupsFooter />
   </div>
 </template>
-
-<script>
-import MeetupsHeader from './MeetupsHeader.vue';
-import MeetupsFooter from './MeetupsFooter.vue';
-
-export default {
-  name: 'LayoutBase',
-
-  components: {
-    MeetupsHeader,
-    MeetupsFooter,
-  },
-};
-</script>
 
 <style scoped>
 .wrapper {

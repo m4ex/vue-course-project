@@ -1,3 +1,16 @@
+<script setup>
+import UiBadge from './UiBadge.vue';
+import UiCard from './UiCard.vue';
+import MeetupInfo from './MeetupInfo.vue';
+
+defineProps({
+  meetup: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
+
 <template>
   <UiCard tag="article" :cover="meetup.image" class="meetup-card">
     <template #header>
@@ -11,29 +24,6 @@
     </template>
   </UiCard>
 </template>
-
-<script>
-import UiBadge from './UiBadge.vue';
-import UiCard from './UiCard.vue';
-import MeetupInfo from './MeetupInfo.vue';
-
-export default {
-  name: 'MeetupCard',
-
-  components: {
-    MeetupInfo,
-    UiBadge,
-    UiCard,
-  },
-
-  props: {
-    meetup: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _meetup-card.css */

@@ -1,3 +1,75 @@
+<script setup>
+// DONE: Task 06-wrappers/05-UiImageUploader
+
+import { computed, ref } from 'vue';
+
+const props = defineProps({
+  preview: {
+    type: String,
+    default: '',
+  },
+  uploader: {
+    type: Function,
+    default: null,
+  },
+});
+defineOptions({
+  inheritAttrs: false,
+});
+
+const isLoading = ref(false);
+const localPreview = ref(props.preview);
+const input = ref()
+
+const state = computed(() => {
+  if (isLoading.value) return 'loading';
+  else if (localPreview.value) return 'loaded';
+  else return 'empty';
+});
+const stateText = computed(() => {
+  switch (state.value) {
+    case 'empty':
+      return 'Загрузить изображение';
+    case 'loading':
+      return 'Загрузка...';
+    default:
+      return 'Удалить изображение';
+  }
+});
+const emit = defineEmits(['select', 'upload', 'error', 'remove']);
+
+function handleClick() {
+  if (state.value === 'loaded') {
+    remove();
+  } else {
+    input.value.click();
+  }
+}
+
+async function handleSelect() {
+  emit('select', input.value.files[0]);
+  localPreview.value = URL.createObjectURL(input.value.files[0]);
+  if (props.uploader) {
+    isLoading.value = true;
+    try {
+      const resp = await props.uploader(input.value.files[0]);
+      emit('upload', resp);
+    } catch (e) {
+      remove();
+      emit('error', e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}
+
+function remove() {
+  localPreview.value = '';
+  input.value.value = '';
+  emit('remove');
+}
+</script>
+
 <template>
   <div class="image-uploader">
     <label
@@ -22,79 +94,6 @@
     />
   </div>
 </template>
-
-<script>
-// DONE: Task 06-wrappers/05-UiImageUploader
-
-export default {
-  name: 'UiImageUploader',
-  props: {
-    preview: {
-      type: String,
-      default: '',
-    },
-    uploader: {
-      type: Function,
-      default: null,
-    },
-  },
-  inheritAttrs: false,
-  data() {
-    return {
-      isLoading: false,
-      localPreview: this.preview,
-    };
-  },
-  computed: {
-    state() {
-      if (this.isLoading) return 'loading';
-      else if (this.localPreview) return 'loaded';
-      else return 'empty';
-    },
-    stateText() {
-      switch (this.state) {
-        case 'empty':
-          return 'Загрузить изображение';
-        case 'loading':
-          return 'Загрузка...';
-        default:
-          return 'Удалить изображение';
-      }
-    },
-  },
-  emits: ['select', 'upload', 'error', 'remove'],
-  methods: {
-    handleClick() {
-      if (this.state === 'loaded') {
-        this.remove();
-      } else {
-        this.$refs.input.click();
-      }
-    },
-    async handleSelect() {
-      this.$emit('select', this.$refs.input.files[0]);
-      this.localPreview = URL.createObjectURL(this.$refs.input.files[0]);
-      if (this.uploader) {
-        this.isLoading = true;
-        try {
-          const resp = await this.uploader(this.$refs.input.files[0]);
-          this.$emit('upload', resp);
-        } catch (e) {
-          this.remove();
-          this.$emit('error', e);
-        } finally {
-          this.isLoading = false;
-        }
-      }
-    },
-    remove() {
-      this.localPreview = '';
-      this.$refs.input.value = '';
-      this.$emit('remove');
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _image-uploader.css */

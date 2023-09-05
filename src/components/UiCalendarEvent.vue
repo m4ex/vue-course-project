@@ -1,21 +1,17 @@
+<script setup>
+defineProps({
+  tag: {
+    type: [String, Object, Function],
+    default: 'div',
+  },
+});
+</script>
+
 <template>
   <component :is="tag" class="calendar-event">
     <slot />
   </component>
 </template>
-
-<script>
-export default {
-  name: 'UiCalendarEvent',
-
-  props: {
-    tag: {
-      type: [String, Object, Function],
-      default: 'div',
-    },
-  },
-};
-</script>
 
 <style scoped>
 .calendar-event {

@@ -1,9 +1,3 @@
-<template>
-  <div class="meetup-cover" :style="[props.image ? `--bg-url: url(${props.image})` : '']">
-    <h1 class="meetup-cover__title">{{ props.title }}</h1>
-  </div>
-</template>
-
 <script setup>
 // DONE: Task 02-components/03-MeetupCover
 
@@ -15,6 +9,12 @@ const props = defineProps({
 });
 const bgUrl = computed(() => (props.image ? `url(${props.image})` : 'var(--default-cover)'));
 </script>
+
+<template>
+  <div class="meetup-cover" :style="[props.image ? `--bg-url: url(${props.image})` : '']">
+    <h1 class="meetup-cover__title">{{ props.title }}</h1>
+  </div>
+</template>
 
 <style scoped>
 /* _meetup-cover.css */

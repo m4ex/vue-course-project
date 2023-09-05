@@ -3,35 +3,7 @@
 // DONE: add <UiIcon> component
 import { computed } from 'vue';
 import UiIcon from '@/components/UiIcon.vue';
-
-/**
- * Словарь заголовков по умолчанию для всех типов пунктов программы
- */
-const agendaItemDefaultTitles = {
-  registration: 'Регистрация',
-  opening: 'Открытие',
-  break: 'Перерыв',
-  coffee: 'Coffee Break',
-  closing: 'Закрытие',
-  afterparty: 'Afterparty',
-  talk: 'Доклад',
-  other: 'Другое',
-};
-
-/**
- * Словарь иконок для всех типов пунктов программы.
- * Соответствует имени иконок в директории /assets/icons
- */
-const agendaItemIcons = {
-  registration: 'key',
-  opening: 'cal-sm',
-  talk: 'tv',
-  break: 'clock',
-  coffee: 'coffee',
-  closing: 'key',
-  afterparty: 'cal-sm',
-  other: 'cal-sm',
-};
+import { agendaItemDefaultTitles, agendaItemIcons } from "@/services/meetupService";
 
 const props = defineProps({
   agendaItem: {

@@ -2,12 +2,6 @@
   <h2 class="title"><slot /></h2>
 </template>
 
-<script>
-export default {
-  name: 'UiPageTitle',
-};
-</script>
-
 <style scoped>
 /* _title.css */
 .title {

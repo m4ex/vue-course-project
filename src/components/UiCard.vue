@@ -1,3 +1,26 @@
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  tag: {
+    type: [String, Object],
+    default: 'div',
+  },
+
+  cover: {
+    type: String,
+  },
+
+  badge: {
+    type: String,
+    required: false,
+  },
+});
+const bgUrl = computed(() => {
+  return props.cover ? `url('${props.cover}')` : 'var(--default-cover)';
+});
+</script>
+
 <template>
   <component :is="tag" class="card">
     <div class="card__col">
@@ -14,33 +37,6 @@
     </div>
   </component>
 </template>
-
-<script>
-export default {
-  name: 'UiCard',
-
-  props: {
-    tag: {
-      type: [String, Object],
-      default: 'div',
-    },
-
-    cover: {
-      type: String,
-    },
-
-    badge: {
-      type: String,
-      required: false,
-    },
-  },
-  computed: {
-    bgUrl() {
-      return this.cover ? `url('${this.cover}')` : 'var(--default-cover)';
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _card.css */

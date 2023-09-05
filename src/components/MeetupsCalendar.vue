@@ -1,3 +1,30 @@
+<script setup>
+// DONE: Task 04-vue-cli/04-MeetupsCalendar + 10-slots/03-UiCalendarView
+
+import { computed } from 'vue';
+import UiCalendarView from "@/components/UiCalendarView.vue";
+import UiCalendarEvent from "@/components/UiCalendarEvent.vue";
+
+const props = defineProps({
+  meetups: {
+    type: Array,
+    required: true,
+  },
+});
+
+const meetupsByDate = computed(() => {
+  const result = {};
+  for (const meetup of props.meetups) {
+    if (!result[meetup.date]) {
+      result[meetup.date] = [meetup];
+    } else {
+      result[meetup.date].push(meetup);
+    }
+  }
+  return result;
+});
+</script>
+
 <template>
   <UiCalendarView>
     <template v-slot="{ timestamp }">
@@ -12,41 +39,5 @@
     </template>
   </UiCalendarView>
 </template>
-
-<script>
-// DONE: Task 04-vue-cli/04-MeetupsCalendar + 10-slots/03-UiCalendarView
-
-import UiCalendarView from '@/components/UiCalendarView.vue';
-import UiCalendarEvent from '@/components/UiCalendarEvent.vue';
-
-export default {
-  name: 'MeetupsCalendar',
-
-  components: {
-    UiCalendarEvent,
-    UiCalendarView,
-  },
-
-  props: {
-    meetups: {
-      type: Array,
-      required: true,
-    },
-  },
-  computed: {
-    meetupsByDate() {
-      const result = {};
-      for (const meetup of this.meetups) {
-        if (!result[meetup.date]) {
-          result[meetup.date] = [meetup];
-        } else {
-          result[meetup.date].push(meetup);
-        }
-      }
-      return result;
-    },
-  },
-};
-</script>
 
 <style scoped></style>

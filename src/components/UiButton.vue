@@ -1,35 +1,32 @@
+<script setup>
+// DONE: Task 06-wrappers/02-UiButton
+
+defineProps({
+  tag: {
+    type: [String, Object],
+    default: 'button',
+  },
+  variant: {
+    type: String,
+    default: 'secondary',
+  },
+  block: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
 <template>
   <component
-    :is="$props.tag"
+    :is="tag"
     class="button"
     :type="tag === 'button' ? 'button' : null"
-    :class="{ button_block: $props.block, [`button_${$props.variant}`]: true }"
+    :class="{ button_block: block, [`button_${variant}`]: true }"
   >
     <slot />
   </component>
 </template>
-
-<script>
-// DONE: Task 06-wrappers/02-UiButton
-
-export default {
-  name: 'UiButton',
-  props: {
-    tag: {
-      type: [String, Object],
-      default: 'button',
-    },
-    variant: {
-      type: String,
-      default: 'secondary',
-    },
-    block: {
-      type: Boolean,
-      default: false,
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _button.css */

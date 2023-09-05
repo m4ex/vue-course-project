@@ -1,3 +1,46 @@
+<script setup>
+// DONE: Task 04-vue-cli/04-UiDropdown1
+
+import UiIcon from './UiIcon.vue';
+import { computed, ref } from "vue";
+
+const emit = computed(['update:modelValue']);
+const props = defineProps({
+  options: { type: Array, required: true },
+  modelValue: { type: String, required: false },
+  title: { type: String, required: true },
+});
+
+const opened = ref(false);
+
+const currentValue = computed({
+  get: () => {
+    return props.modelValue;
+  },
+  set: (value) => {
+    emit('update:modelValue', value);
+  },
+});
+const currentOption = computed(() => {
+  return props.options.find((option) => option.value === currentValue.value);
+});
+const currentOptionText = computed(() => {
+  return currentOption.value ? currentOption.value.text : props.title;
+});
+const currentOptionIcon = computed(() => {
+  return currentOption.value ? currentOption.value.icon : null;
+});
+const optionsWithIconsExists = computed(() => {
+  return props.options.filter((option) => option.icon).length > 0;
+});
+
+
+function update(value) {
+  currentValue.value = value;
+  opened.value = false;
+}
+</script>
+
 <template>
   <div class="dropdown" :class="{ dropdown_opened: opened }">
     <button
@@ -29,56 +72,6 @@
     </select>
   </div>
 </template>
-
-<script>
-// DONE: Task 04-vue-cli/04-UiDropdown1
-
-import UiIcon from './UiIcon.vue';
-
-export default {
-  name: 'UiDropdown',
-  emits: ['update:modelValue'],
-  props: {
-    options: { type: Array, required: true },
-    modelValue: { type: String, required: false },
-    title: { type: String, required: true },
-  },
-  data() {
-    return {
-      opened: false,
-    };
-  },
-  computed: {
-    currentOption() {
-      return this.options.find((option) => option.value === this.currentValue);
-    },
-    currentOptionText() {
-      return this.currentOption ? this.currentOption.text : this.title;
-    },
-    currentOptionIcon() {
-      return this.currentOption ? this.currentOption.icon : null;
-    },
-    optionsWithIconsExists() {
-      return this.options.filter((option) => option.icon).length > 0;
-    },
-    currentValue: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-  },
-  methods: {
-    update(value) {
-      this.currentValue = value;
-      this.opened = false;
-    },
-  },
-  components: { UiIcon },
-};
-</script>
 
 <style scoped>
 /* _dropdown.css */

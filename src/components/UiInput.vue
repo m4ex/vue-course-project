@@ -1,3 +1,55 @@
+<script setup>
+// DONE: Task 06-wrappers/03-UiInput
+import { computed, ref } from 'vue';
+
+defineOptions({
+  inheritAttrs: false,
+});
+
+const props = defineProps({
+  small: {
+    type: Boolean,
+    default: false,
+  },
+  rounded: {
+    type: Boolean,
+    default: false,
+  },
+  multiline: {
+    type: Boolean,
+    default: false,
+  },
+  modelValue: {
+    type: String,
+    default: '',
+  },
+  modelModifiers: {
+    default: () => ({}),
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+defineExpose({ focus });
+
+const modelValueProxy = computed({
+  get: () => {
+    return props.modelValue;
+  },
+  set: (value) => {
+    emit('update:modelValue', value);
+  },
+});
+const eventName = computed(() => {
+  return props.modelModifiers.lazy ? 'change' : 'input';
+});
+
+const input = ref();
+
+function focus() {
+  input.value.focus();
+}
+</script>
+
 <template>
   <div
     class="input-group"
@@ -16,7 +68,7 @@
       ref="input"
       v-bind="$attrs"
       :value="modelValueProxy"
-      @[eventName]="modelValueProxy = $event.target.value"
+      @[eventName]="(event) => (modelValueProxy = event.target.value)"
       class="form-control"
       :class="{ 'form-control_sm': small, 'form-control_rounded': rounded }"
     />
@@ -26,56 +78,6 @@
     </div>
   </div>
 </template>
-
-<script>
-// DONE: Task 06-wrappers/03-UiInput
-
-export default {
-  name: 'UiInput',
-  inheritAttrs: false,
-  props: {
-    small: {
-      type: Boolean,
-      default: false,
-    },
-    rounded: {
-      type: Boolean,
-      default: false,
-    },
-    multiline: {
-      type: Boolean,
-      default: false,
-    },
-    modelValue: {
-      type: String,
-      default: '',
-    },
-    modelModifiers: {
-      default: () => ({}),
-    },
-  },
-  emits: ['update:modelValue'],
-  expose: ['focus'],
-  computed: {
-    modelValueProxy: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-    eventName() {
-      return this.modelModifiers.lazy ? 'change' : 'input';
-    },
-  },
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _input-group.css */

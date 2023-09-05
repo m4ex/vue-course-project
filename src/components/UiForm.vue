@@ -1,3 +1,7 @@
+<script setup>
+defineEmits(['submit'])
+</script>
+
 <template>
   <form class="form" @submit.prevent="$emit('submit', $event)">
     <slot />
@@ -11,14 +15,6 @@
     </div>
   </form>
 </template>
-
-<script>
-export default {
-  name: 'UiForm',
-
-  emits: ['submit'],
-};
-</script>
 
 <style scoped>
 /* _form.css */

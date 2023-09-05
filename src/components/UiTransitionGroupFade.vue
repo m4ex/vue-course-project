@@ -1,23 +1,19 @@
+<script setup>
+// DONE: Task 03-sfc/04-UiTransition
+
+defineProps({
+  tag: {
+    type: [String, Object, Function],
+    default: 'div',
+  },
+});
+</script>
+
 <template>
   <TransitionGroup :tag="tag" name="fade-list" class="fade-list">
     <slot />
   </TransitionGroup>
 </template>
-
-<script>
-// DONE: Task 03-sfc/04-UiTransition
-
-export default {
-  name: 'UiTransitionGroupFade',
-
-  props: {
-    tag: {
-      type: [String, Object, Function],
-      default: 'div',
-    },
-  },
-};
-</script>
 
 <style scoped>
 .fade-list {

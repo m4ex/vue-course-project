@@ -1,18 +1,13 @@
+<script setup>
+// DONE: Добавить имя автора проекта :)
+import UiContainer from './UiContainer.vue';
+</script>
+
 <template>
   <footer class="footer">
     <UiContainer>&copy;m4ex 2022-{{ new Date().getFullYear() }}</UiContainer>
   </footer>
 </template>
-
-<script>
-// DONE: Добавить имя автора проекта :)
-import UiContainer from './UiContainer.vue';
-
-export default {
-  name: 'MeetupsFooter',
-  components: { UiContainer },
-};
-</script>
 
 <style scoped>
 /* _footer.css */

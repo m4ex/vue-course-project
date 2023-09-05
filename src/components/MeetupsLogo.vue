@@ -6,12 +6,6 @@
   </h1>
 </template>
 
-<script>
-export default {
-  name: 'MeetupsLogo',
-};
-</script>
-
 <style scoped>
 /* _logo.css */
 .logo,

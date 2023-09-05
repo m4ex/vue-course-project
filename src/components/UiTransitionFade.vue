@@ -4,14 +4,6 @@
   </Transition>
 </template>
 
-<script>
-// DONE: Task 03-sfc/04-UiTransition
-
-export default {
-  name: 'UiTransitionFade',
-};
-</script>
-
 <style scoped>
 /* _transitions.css */
 .fade-enter-active,

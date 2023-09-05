@@ -1,3 +1,31 @@
+<script setup>
+// DONE: Task 06-wrappers/04-UiCheckbox
+
+import { computed } from 'vue';
+
+const props = defineProps({
+  modelValue: {
+    type: [Boolean, Array, Set],
+    required: true,
+  },
+});
+
+defineOptions({
+  inheritAttrs: false,
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const modelValueProxy = computed({
+  get: () => {
+    return props.modelValue;
+  },
+  set: (value) => {
+    emit('update:modelValue', value);
+  },
+});
+</script>
+
 <template>
   <label class="checkbox">
     <input type="checkbox" v-bind="$attrs" v-model="modelValueProxy" class="checkbox__input" />
@@ -5,32 +33,6 @@
     <slot />
   </label>
 </template>
-
-<script>
-// DONE: Task 06-wrappers/04-UiCheckbox
-
-export default {
-  name: 'UiCheckbox',
-  props: {
-    modelValue: {
-      type: [Boolean, Array, Set],
-      required: true,
-    },
-  },
-  inheritAttrs: false,
-  emits: ['update:modelValue'],
-  computed: {
-    modelValueProxy: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _checkbox.css */

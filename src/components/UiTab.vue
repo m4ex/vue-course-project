@@ -1,17 +1,13 @@
+<script setup>
+// DONE: Task UiTabs
+defineProps({ to: { type: [String, Object], required: true } });
+</script>
+
 <template>
-  <router-link :to="$props.to" class="tabs__tab" role="tab" exactActiveClass="tabs__tab_active">
+  <router-link :to="to" class="tabs__tab" role="tab" exactActiveClass="tabs__tab_active">
     <slot></slot>
   </router-link>
 </template>
-
-<script>
-// DONE: Task UiTabs
-
-export default {
-  name: 'UiTab',
-  props: { to: { type: [String, Object], required: true } },
-};
-</script>
 
 <style scoped>
 /* _tabs.css */

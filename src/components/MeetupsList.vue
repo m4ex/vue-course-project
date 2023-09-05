@@ -1,3 +1,16 @@
+<script setup>
+// DONE: Добавить <UiTransitionGroupFade>
+import MeetupCard from './MeetupCard.vue';
+import UiTransitionGroupFade from '@/components/UiTransitionGroupFade.vue';
+
+defineProps({
+  meetups: {
+    type: Array,
+    required: true,
+  },
+});
+</script>
+
 <template>
   <UiTransitionGroupFade class="meetups-list">
     <li v-for="meetup in meetups" :key="meetup.id" class="meetups-list__item">
@@ -11,28 +24,6 @@
     </li>
   </UiTransitionGroupFade>
 </template>
-
-<script>
-// DONE: Добавить <UiTransitionGroupFade>
-import MeetupCard from './MeetupCard.vue';
-import UiTransitionGroupFade from '@/components/UiTransitionGroupFade.vue';
-
-export default {
-  name: 'MeetupsList',
-
-  components: {
-    MeetupCard,
-    UiTransitionGroupFade,
-  },
-
-  props: {
-    meetups: {
-      type: Array,
-      required: true,
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _meetups-list.css */

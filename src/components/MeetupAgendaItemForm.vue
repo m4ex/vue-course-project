@@ -1,73 +1,12 @@
-<template>
-  <fieldset class="agenda-item-form">
-    <button type="button" class="agenda-item-form__remove-button" @click="$emit('remove')">
-      <UiIcon icon="trash" />
-    </button>
-
-    <UiFormGroup>
-      <UiDropdown title="Тип" :options="$options.agendaItemTypeOptions" name="type" v-model="localItem.type" />
-    </UiFormGroup>
-
-    <div class="agenda-item-form__row">
-      <div class="agenda-item-form__col">
-        <UiFormGroup label="Начало">
-          <UiInput type="time" placeholder="00:00" name="startsAt" v-model="startsAt" />
-        </UiFormGroup>
-      </div>
-      <div class="agenda-item-form__col">
-        <UiFormGroup label="Окончание">
-          <UiInput type="time" placeholder="00:00" name="endsAt" v-model="localItem.endsAt" />
-        </UiFormGroup>
-      </div>
-    </div>
-
-    <UiFormGroup v-for="schema in agendaItemFormSchemas[localItem.type]" :key="schema.name" :label="schema.label">
-      <Component :is="schema.component" v-bind="schema.props" v-model="localItem[schema.props.name]" />
-    </UiFormGroup>
-  </fieldset>
-</template>
-
-<script>
+<script setup>
 // DONE: Task 07-forms/04-GeneratedForm
 import UiIcon from '@/components/UiIcon.vue';
 import UiFormGroup from '@/components/UiFormGroup.vue';
 import UiInput from '@/components/UiInput.vue';
 import UiDropdown from '@/components/UiDropdown.vue';
 import { klona } from 'klona';
-
-const agendaItemTypeIcons = {
-  registration: 'key',
-  opening: 'cal-sm',
-  talk: 'tv',
-  break: 'clock',
-  coffee: 'coffee',
-  closing: 'key',
-  afterparty: 'cal-sm',
-  other: 'cal-sm',
-};
-
-const agendaItemDefaultTitles = {
-  registration: 'Регистрация',
-  opening: 'Открытие',
-  break: 'Перерыв',
-  coffee: 'Coffee Break',
-  closing: 'Закрытие',
-  afterparty: 'Afterparty',
-  talk: 'Доклад',
-  other: 'Другое',
-};
-
-const agendaItemTypeOptions = Object.entries(agendaItemDefaultTitles).map(([type, title]) => ({
-  value: type,
-  text: title,
-  icon: agendaItemTypeIcons[type],
-}));
-
-const talkLanguageOptions = [
-  { value: null, text: 'Не указано' },
-  { value: 'RU', text: 'RU' },
-  { value: 'EN', text: 'EN' },
-];
+import { talkLanguageOptions, agendaItemOptions } from '@/services/meetupService';
+import { reactive, ref, watch } from "vue";
 
 /**
  * @typedef FormItemSchema
@@ -150,50 +89,61 @@ const agendaItemFormSchemas = {
   },
 };
 
-export default {
-  name: 'MeetupAgendaItemForm',
-
-  components: { UiIcon, UiFormGroup, UiInput, UiDropdown },
-
-  agendaItemTypeOptions,
-  agendaItemFormSchemas,
-
-  props: {
-    agendaItem: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  agendaItem: {
+    type: Object,
+    required: true,
   },
-  data() {
-    return {
-      agendaItemTypeOptions,
-      agendaItemFormSchemas,
-      localItem: klona(this.agendaItem),
-      startsAt: this.agendaItem.startsAt,
-    };
-  },
-  emits: ['update:agendaItem', 'remove'],
-  watch: {
-    localItem: {
-      handler(value) {
-        this.$emit('update:agendaItem', klona(value));
-      },
-      deep: true,
-    },
-    startsAt(newValue, oldValue) {
-      this.localItem.startsAt = newValue;
-      const diff = Number(newValue.split(':')[0]) - Number(oldValue.split(':')[0]);
-      const oldEndHours = Number(this.localItem.endsAt.split(':')[0]);
-      const newEndHours = oldEndHours + diff;
-      let newEndHoursString = `${newEndHours > 24 ? newEndHours - 24 : newEndHours}`;
-      if (newEndHoursString.length === 1) {
-        newEndHoursString = `0${newEndHoursString}`;
-      }
-      this.localItem.endsAt = `${newEndHoursString}:${this.localItem.endsAt.split(':')[1]}`;
-    },
-  },
-};
+});
+
+const localItem = reactive(klona(props.agendaItem));
+const startsAt = ref(props.agendaItem.startsAt)
+
+const emit = defineEmits(['update:agendaItem', 'remove']);
+watch(localItem, (value) => {
+  emit('update:agendaItem', klona(value));
+});
+watch(startsAt, (newValue, oldValue) => {
+  localItem.startsAt = newValue;
+  const diff = Number(newValue.split(':')[0]) - Number(oldValue.split(':')[0]);
+  const oldEndHours = Number(localItem.endsAt.split(':')[0]);
+  const newEndHours = oldEndHours + diff;
+  let newEndHoursString = `${newEndHours > 24 ? newEndHours - 24 : newEndHours}`;
+  if (newEndHoursString.length === 1) {
+    newEndHoursString = `0${newEndHoursString}`;
+  }
+  localItem.endsAt = `${newEndHoursString}:${localItem.endsAt.split(':')[1]}`;
+});
 </script>
+
+<template>
+  <fieldset class="agenda-item-form">
+    <button type="button" class="agenda-item-form__remove-button" @click="emit('remove')">
+      <UiIcon icon="trash" />
+    </button>
+
+    <UiFormGroup>
+      <UiDropdown title="Тип" :options="agendaItemOptions" name="type" v-model="localItem.type" />
+    </UiFormGroup>
+
+    <div class="agenda-item-form__row">
+      <div class="agenda-item-form__col">
+        <UiFormGroup label="Начало">
+          <UiInput type="time" placeholder="00:00" name="startsAt" v-model="startsAt" />
+        </UiFormGroup>
+      </div>
+      <div class="agenda-item-form__col">
+        <UiFormGroup label="Окончание">
+          <UiInput type="time" placeholder="00:00" name="endsAt" v-model="localItem.endsAt" />
+        </UiFormGroup>
+      </div>
+    </div>
+
+    <UiFormGroup v-for="schema in agendaItemFormSchemas[localItem.type]" :key="schema.name" :label="schema.label">
+      <Component :is="schema.component" v-bind="schema.props" v-model="localItem[schema.props.name]" />
+    </UiFormGroup>
+  </fieldset>
+</template>
 
 <style scoped>
 /* _agenda-item-form.css */

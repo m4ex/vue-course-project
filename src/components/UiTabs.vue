@@ -9,14 +9,6 @@
   </div>
 </template>
 
-<script>
-// DONE: Task UiTabs
-
-export default {
-  name: 'UiTabs',
-};
-</script>
-
 <style scoped>
 /* _tabs.css */
 .tabs {

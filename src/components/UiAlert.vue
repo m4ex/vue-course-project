@@ -1,21 +1,17 @@
+<script setup>
+defineProps({
+  text: {
+    type: String,
+    default: 'Error...',
+  },
+});
+</script>
+
 <template>
   <div class="alert">
     <slot>{{ text }}</slot>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'UiAlert',
-
-  props: {
-    text: {
-      type: String,
-      default: 'Error...',
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* _alert.css */

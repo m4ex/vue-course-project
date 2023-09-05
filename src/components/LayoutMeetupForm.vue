@@ -1,3 +1,12 @@
+<script setup>
+import UiContainer from './UiContainer.vue';
+import UiPageTitle from './UiPageTitle.vue';
+
+defineProps({
+  title: String,
+});
+</script>
+
 <template>
   <div class="page-meetup-form">
     <UiContainer>
@@ -6,19 +15,6 @@
     </UiContainer>
   </div>
 </template>
-
-<script>
-import UiContainer from './UiContainer.vue';
-import UiPageTitle from './UiPageTitle.vue';
-
-export default {
-  name: 'LayoutMeetupForm',
-  components: { UiPageTitle, UiContainer },
-  props: {
-    title: String,
-  },
-};
-</script>
 
 <style scoped>
 .page-meetup-form {

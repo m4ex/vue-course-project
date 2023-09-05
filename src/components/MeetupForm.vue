@@ -1,3 +1,47 @@
+<script setup>
+import { klona } from 'klona';
+import UiButton from './UiButton.vue';
+import UiFormGroup from './UiFormGroup.vue';
+import UiImageUploader from './UiImageUploader.vue';
+import UiInput from './UiInput.vue';
+import UiInputDate from './UiInputDate.vue';
+import MeetupAgendaItemForm from './MeetupAgendaItemForm.vue';
+import { createAgendaItem } from '@/services/meetupService';
+import { reactive } from 'vue';
+
+const props = defineProps({
+  meetup: {
+    type: Object,
+    required: true,
+  },
+
+  submitText: {
+    type: String,
+    default: '',
+  },
+});
+
+const emit = defineEmits(['submit', 'cancel']);
+
+const localMeetup = reactive(klona(props.meetup));
+
+function addAgendaItem() {
+  const newItem = createAgendaItem();
+  if (localMeetup.agenda.length) {
+    newItem.startsAt = localMeetup.agenda[localMeetup.agenda.length - 1].endsAt;
+  }
+  localMeetup.agenda.push(newItem);
+}
+
+function removeAgendaItem(index) {
+  localMeetup.agenda.splice(index, 1);
+}
+
+function handleSubmit() {
+  emit('submit', klona(localMeetup));
+}
+</script>
+
 <template>
   <form class="meetup-form" @submit.prevent="handleSubmit">
     <div class="meetup-form__content">
@@ -47,7 +91,7 @@
           block
           data-test="cancel"
           variant="secondary"
-          @click="$emit('cancel')"
+          @click="emit('cancel')"
         >
           Отмена
         </UiButton>
@@ -58,68 +102,6 @@
     </div>
   </form>
 </template>
-
-<script>
-import { klona } from 'klona';
-import UiButton from './UiButton.vue';
-import UiFormGroup from './UiFormGroup.vue';
-import UiImageUploader from './UiImageUploader.vue';
-import UiInput from './UiInput.vue';
-import UiInputDate from './UiInputDate.vue';
-import MeetupAgendaItemForm from './MeetupAgendaItemForm.vue';
-import { createAgendaItem } from "@/services/meetupService";
-
-export default {
-  name: 'MeetupForm',
-
-  components: {
-    MeetupAgendaItemForm,
-    UiButton,
-    UiFormGroup,
-    UiImageUploader,
-    UiInput,
-    UiInputDate,
-  },
-
-  props: {
-    meetup: {
-      type: Object,
-      required: true,
-    },
-
-    submitText: {
-      type: String,
-      default: '',
-    },
-  },
-
-  emits: ['submit', 'cancel'],
-
-  data() {
-    return {
-      localMeetup: klona(this.meetup),
-    };
-  },
-
-  methods: {
-    addAgendaItem() {
-      const newItem = createAgendaItem();
-      if (this.localMeetup.agenda.length) {
-        newItem.startsAt = this.localMeetup.agenda[this.localMeetup.agenda.length - 1].endsAt;
-      }
-      this.localMeetup.agenda.push(newItem);
-    },
-
-    removeAgendaItem(index) {
-      this.localMeetup.agenda.splice(index, 1);
-    },
-
-    handleSubmit() {
-      this.$emit('submit', klona(this.localMeetup));
-    },
-  },
-};
-</script>
 
 <style scoped>
 .meetup-form__section {
