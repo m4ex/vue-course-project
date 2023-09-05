@@ -1,4 +1,4 @@
-import { httpClient } from './httpClient/httpClient.js';
+import { httpClient } from './httpClient/httpClient.ts';
 
 /**
  * Получить список всех митапов

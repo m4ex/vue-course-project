@@ -1,25 +1,27 @@
-<script setup>
+<script setup lang="ts">
 // DONE: Task 04-vue-router/02-TheToaster
 import UIToast from '@/plugins/toaster/UIToast.vue';
 import { ref } from 'vue';
 
 defineExpose({ success, error });
 
-const toasts = ref([]);
+const toasts = ref<Array<{ id:Number, type:ToastType, message: String }>>([]);
 const counter = ref(0);
 
-function success(message) {
+function success(message: string) {
   newToast(message, 'success', 5000);
 }
 
-function error(message) {
+function error(message: string) {
   newToast(message, 'error', 5000);
 }
 
-function newToast(message, type, timeout) {
+type ToastType = 'success' | 'error';
+
+function newToast(message: string, type: ToastType, timeout: number) {
   toasts.value.push({ id: counter.value, type: type, message: message });
   setTimeout(
-    (id) => {
+    (id: number) => {
       toasts.value = toasts.value.filter(function (obj) {
         return obj.id !== id;
       });

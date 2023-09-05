@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LayoutBase from './components/LayoutBase.vue';
 import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
@@ -29,7 +29,7 @@ httpClient.onNetworkError(() => {
 window.addEventListener('error', (error) => onErrorResponse(error));
 window.addEventListener('unhandledrejection', (event) => onErrorResponse(event.reason));
 
-function onErrorResponse(event) {
+function onErrorResponse(event: ErrorEvent) {
   console.error("global error handler",event);
   toast.error(event.message);
 }
