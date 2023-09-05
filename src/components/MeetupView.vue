@@ -55,7 +55,7 @@ const deleteMeetupHandler = async () => {
   }
 };
 
-//COMMENT FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
+// MYCOMMENT FIXME: В бэке ошибка, при запросе митапа не выставляется флаг attending, он выставляется только при запросе списка митапов (но не одного конкретного)
 const attending = ref(props.meetup.attending);
 
 const toggleAttending = async () => {

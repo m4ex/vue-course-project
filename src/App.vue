@@ -39,7 +39,7 @@ function onErrorResponse(event) {
   <LayoutBase>
     <RouterView>
       <template #default="{ Component }">
-        <!-- COMMENT добавил в исключение PageMeetups чтобы корректно отображался статус участия после возврата со страницы митапа -->
+        <!-- MYCOMMENT добавил в исключение PageMeetups чтобы корректно отображался статус участия после возврата со страницы митапа -->
         <KeepAlive v-if="Component" :max="3" exclude="PageMeetups">
           <component :is="Component" />
         </KeepAlive>

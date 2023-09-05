@@ -33,7 +33,8 @@ httpClient.interceptors.response.use(
   (error) => {
     if ((!error.response || error.code === 'ECONNABORTED') && httpClient._onNetworkError) {
       httpClient._onNetworkError();
-      //COMMENT в строки ниже было error.response.statusCode вместо error.response.status результат не с кодом 401 не оборачивается в контейнер
+      // MYCOMMENT в строки ниже было error.response.statusCode вместо error.response.status
+      // результат с кодом 401 не оборачивается в контейнер
       // Да и вообще с этим контейнером результата как-то не удобно, он больше путал чем помогал
     } else if (error.response.status === 401 && httpClient._onAuthenticatedHandler) {
       httpClient._onAuthenticatedHandler();
